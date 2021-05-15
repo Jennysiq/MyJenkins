@@ -10,7 +10,7 @@ pipeline {
             steps {
                 checkout([
           $class: 'GitSCM',
-          branches: 'main',
+          branches: 'master',
           userRemoteConfigs: [[
           url: 'git@github.com:Jennysiq/projectAPP.git',
           credentialsId: 'git-hub_ssh-key',
