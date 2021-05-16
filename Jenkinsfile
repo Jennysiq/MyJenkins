@@ -11,7 +11,6 @@ pipeline {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/master']],
-                    extensions: []
                     userRemoteConfigs: [[
                     credentialsId: 'git-hub_ssh-key',
                     url: 'git@github.com:Jennysiq/projectAPP.git'
