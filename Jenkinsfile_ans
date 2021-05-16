@@ -24,7 +24,7 @@ pipeline {
                     branches: [[name: '*/master']],
                     userRemoteConfigs: [[
                     credentialsId: 'git-hub_ssh-key',
-                    url: 'git@github.com:Jennysiq/projectAPP.git'
+                    url: 'git@github.com:Jennysiq/MyInfrastucture.git'
                     ]]
                 ])
             }
