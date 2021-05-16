@@ -1,43 +1,49 @@
 pipeline {
-    parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-    }
-
+    agent any
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_ACCESS_KEY_ID     = credentials('AWS_credentials')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_credentials')
     }
-
-    agent  any
-
         tools {
-        'org.jenkinsci.plugins.terraform.TerraformInstallation' 'terraform10210'
-        }
+        "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform10210"
+              }
 
     stages {
+        stage('Notification SLACK') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
+            }            
+        }
+    
+    
+    
         stage('Checkout SCM') {
             steps {
-                checkout([$class: 'GitSCM', 
-                branches: [[name: '*/main']], 
-                extensions: [],
-                userRemoteConfigs:[[
-                credentialsId: 'git-hub_ssh-key', url: 'git@github.com:Jennysiq/MyInfrastucture.git']]])
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[
+                    credentialsId: 'git-hub_ssh-key',
+                    url: 'git@github.com:Jennysiq/projectAPP.git'
+                    ]]
+                ])
             }
         }
+
         stage('Init') {
             steps {
                 sh 'terraform init -input=false'
             }
         }
-
+ 
         stage('Plan') {
             steps {
-
-                sh 'pwd; terraform plan -input=false -out tfplan'
-                sh 'pwd; terraform show -no-color tfplan > tfplan.txt'
+                sh "terraform plan -input=false -out tfplan"
+                sh "terraform show -no-color tfplan > tfplan.txt"
             }
         }
-        stage('Approval') {
+
+        stage('Approv') {
             when {
                 not {
                     equals expected: true, actual: params.autoApprove
@@ -47,21 +53,26 @@ pipeline {
             steps {
                 script {
                     def plan = readFile 'tfplan.txt'
-                    input message: 'Do you want to apply the plan?',
+                    input message: "Do you want to apply the plan?",
                     parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-                }
-            }
-        }
+               }
+           }
+       }
 
-        stage('Apply/destroy') {
+        stage('Apply Terraform') {
             steps {
-                sh 'pwd; terraform apply -input=false tfplan'
-            //sh "pwd; terraform destroy -auto-approve"
+                sh "pwd; terraform apply -input=false tfplan"
             }
         }
-        stage('S3Copy step') {
+//      stage('S3Copy step') {
+//          steps {
+//          s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'my.bucket.for.upload.jenkins47', excludedFile: 'Jenkinsfile', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: '*/', storageClass: 'STANDARD', uploadFromSlave: true, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 'Jenkins', userMetadata: [] 
+//          }
+//      }
+
+        stage('Notification SLACK') {
             steps {
-                s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'my.bucket.for.upload.jenkins47', excludedFile: 'Jenkinsfile', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: '*/', storageClass: 'STANDARD', uploadFromSlave: true, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 'Jenkins', userMetadata: []
+                slackSend channel: '#jenkins-slack-test', message: 'Prozarka zavershena'
             }
         }
     }
