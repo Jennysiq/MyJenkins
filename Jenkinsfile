@@ -6,13 +6,12 @@ pipeline {
     }
 
     stages {
-        
         stage('Notification SLACK') {
             steps {
                 slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
             }
         }
-        
+
         stage('Checkout SCM') {
             steps {
                 checkout([
@@ -41,8 +40,9 @@ pipeline {
 
         stage('Ansible') {
             steps {
-                ansiblePlaybook become: true, becomeUser: 'root', credentialsId: 'hw41', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ec2.py', playbook: 'deploy.yml'
+                ansiblePlaybook become: true, becomeUser: 'root', credentialsId: 'jenkins', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ec2.py', playbook: 'playbook.yml'
             }
         }
     }
 }
+
