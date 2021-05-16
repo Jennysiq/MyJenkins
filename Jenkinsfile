@@ -28,7 +28,7 @@ pipeline {
 
         stage('Run shumba-bumba') {
             steps {
-                sh 'apt install -y python3'
+                sh 'echo shumba-bumba'
             }
         }
 
