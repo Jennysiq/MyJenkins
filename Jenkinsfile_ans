@@ -70,7 +70,7 @@ pipeline {
 //          }
 //      }
 
-        stage('Notification SLACK') {
+        stage('Notification Finish SLACK') {
             steps {
                 slackSend channel: '#jenkins-slack-test', message: 'Prozarka zavershena'
             }
