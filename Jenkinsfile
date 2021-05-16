@@ -6,6 +6,13 @@ pipeline {
     }
 
     stages {
+        
+        stage('Notification on Slack Start') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
+            }
+        }
+        
         stage('Checkout SCM') {
             steps {
                 checkout([
@@ -21,7 +28,7 @@ pipeline {
 
         stage('Run Docker-compose') {
             steps {
-                sh 'docker-compose up'
+                sh 'echo shumba-bumba'
             }
         }
 
