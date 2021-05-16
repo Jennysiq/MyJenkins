@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Run Docker-compose') {
+        stage('Run shumba-bumba') {
             steps {
                 sh 'echo shumba-bumba'
             }
