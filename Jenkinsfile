@@ -7,7 +7,7 @@ pipeline {
 
     stages {
         
-        stage('Notification on Slack Start') {
+        stage('Notification SLACK') {
             steps {
                 slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
             }
