@@ -9,13 +9,14 @@ pipeline {
         stage('Checkout SCM') {
             steps {
                 checkout([
-          $class: 'GitSCM',
-          branches: 'master',
-          userRemoteConfigs: [[
-          url: 'git@github.com:Jennysiq/projectAPP.git',
-          credentialsId: 'git-hub_ssh-key',
-            ]]
-          ])
+                    $class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    extensions: []
+                    userRemoteConfigs: [[
+                    credentialsId: 'git-hub_ssh-key',
+                    url: 'git@github.com:Jennysiq/projectAPP.git'
+                    ]]
+                ])
             }
         }
 
