@@ -57,12 +57,12 @@ pipeline {
             }            
         }
  
-//        stage('Plan') {
-//            steps {
-//                sh "pwd;terraform plan -input=false -out tfplan"
-//                sh "pwd;terraform show -no-color tfplan > tfplan.txt"
-//            }
-//        }
+        stage('Plan') {
+            steps {
+                sh "pwd;terraform plan -input=false -out tfplan"
+                sh "pwd;terraform show -no-color tfplan > tfplan.txt"
+            }
+        }
         
         stage('Notification Terraform Approve') {
             steps {
