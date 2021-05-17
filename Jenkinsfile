@@ -31,9 +31,10 @@ pipeline {
             }
         }
         
-        stage('Run shumba-bumba') {
+        stage('Build and push Container with myflask') {
             steps {
-                sh 'echo shumba-bumba'
+                sh "docker build -f Dockerfile . -t Jennysiq/myflask_project:${BUILD_ID}"
+                sh "docker push Jennysiq/myflask_project:${BUILD_ID}
             }
         }
         
