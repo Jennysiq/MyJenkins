@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Notification SLACK') {
             steps {
-                slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
+                slackSend channel: '#jenkins-slack-test', message: 'Start Building Second Job'
             }
         }
 
@@ -24,13 +24,25 @@ pipeline {
                 ])
             }
         }
-
+        
+        stage('Run Something') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Run something'
+            }
+        }
+        
         stage('Run shumba-bumba') {
             steps {
                 sh 'echo shumba-bumba'
             }
         }
-
+        
+        stage('Start .py dynamic inventory') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Dymanic Inventory Stage'
+            }
+        }
+        
         stage('run ec2.py') {
             steps {
                 sh 'chmod +x ec2.py'
@@ -38,6 +50,12 @@ pipeline {
             }
         }
 
+        stage('Delpoy apt through Ansible') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Delpoy apt through Ansible'
+            }
+        }
+        
         stage('Ansible') {
             steps {
                 ansiblePlaybook become: true, becomeUser: 'root', credentialsId: 'jenkins', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ec2.py', playbook: 'playbook.yml'
