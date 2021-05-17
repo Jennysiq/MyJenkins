@@ -27,8 +27,7 @@ pipeline {
 
         stage('Run shumba-bumba') {
             steps {
-                sh 'ssh-add /home/ubuntu/.ssh/jenkins.pem
-'
+                sh 'ssh-add /home/ubuntu/.ssh/jenkins.pem'
             }
         }
 
