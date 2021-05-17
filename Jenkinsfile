@@ -33,6 +33,7 @@ pipeline {
         
         stage('Build and push Container with myflask') {
             steps {
+                sh "whoami"
                 sh "docker build -f Dockerfile . -t Jennysiq/myflask_project:${BUILD_ID} ."
                 sh "docker push Jennysiq/myflask_project:${BUILD_ID}"
             }
