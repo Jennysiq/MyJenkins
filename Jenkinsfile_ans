@@ -9,7 +9,7 @@ pipeline {
         }
 
     stages {
-        stage('Notification SLACK') {
+        stage('Let`s Start') {
             steps {
                 slackSend channel: '#jenkins-slack-test', message: 'Posla zhara'
             }            
@@ -29,18 +29,44 @@ pipeline {
                 ])
             }
         }
+        
+        stage('Notification Terraform Init') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Init TF project'
+            }            
+        }
 
         stage('Init') {
             steps {
-                sh 'pwd;terraform init -input=false'
+  //              sh 'terraform init -input=false'
+                sh '''terraform init
+                if [ $action = ‘plan’ ]; then
+                terraform plan > plan.out
+                elif [ $action = ‘apply’ ]; then
+                terraform apply — auto-approve
+                elif [ $action = ‘destroy’ ]; then
+                terraform destroy — auto-approve
+                fi'''
             }
         }
- 
-        stage('Plan') {
+        
+        stage('Notification Terraform Plan') {
             steps {
-                sh "pwd;terraform plan -input=false -out tfplan"
-                sh "pwd;terraform show -no-color tfplan > tfplan.txt"
-            }
+                slackSend channel: '#jenkins-slack-test', message: 'Plan TF project'
+            }            
+        }
+ 
+//        stage('Plan') {
+//            steps {
+//                sh "pwd;terraform plan -input=false -out tfplan"
+//                sh "pwd;terraform show -no-color tfplan > tfplan.txt"
+//            }
+//        }
+        
+        stage('Notification Terraform Approve') {
+            steps {
+                slackSend channel: '#jenkins-slack-test', message: 'Approve TF project'
+            }            
         }
 
         stage('Approv') {
@@ -72,7 +98,7 @@ pipeline {
 
         stage('Notification Finish SLACK') {
             steps {
-                slackSend channel: '#jenkins-slack-test', message: 'Prozarka zavershena'
+                slackSend channel: '#jenkins-slack-test', message: 'Second Work is starting RIGHT NOW!'
             }
         }
     }
