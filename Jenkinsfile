@@ -35,6 +35,7 @@ pipeline {
             steps {
                 sh "whoami"
                 sh "docker build -t jennysiq/myflask_project:${BUILD_ID} ."
+                sh "docker -u jennysiq -p${password}"
                 sh "docker push jennysiq/myflask_project:${BUILD_ID}"
             }
         }
