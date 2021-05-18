@@ -38,7 +38,7 @@ pipeline {
 
         stage('Init') {
             steps {
-                sh 'terraform init -input=false'
+                sh 'pwd;terraform init -input=false'
   //             sh '''terraform init
   //              if [ $action = ‘plan’ ]; then
   //              terraform plan > plan.out
